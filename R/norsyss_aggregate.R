@@ -220,7 +220,7 @@ norsyss_aggregate <- function(
 
 # A function to extract the number of doctors per week
 get_n_doctors <- function(folder) {
-  db <- RODBC::odbcDriverConnect("driver={ODBC Driver 17 for SQL Server};server=dm-prod;database=SykdomspulsenAnalyse; trusted_connection=yes")
+  db <- RODBC::odbcDriverConnect("driver={Sql Server};server=dm-prod;database=SykdomspulsenAnalyse; trusted_connection=yes")
   res <- RODBC::sqlQuery(db, 'select count(distinct(Behandler_Id)) as behandlere, DATEPART("ISO_WEEK", Konsultasjonsdato) as week ,DATEPART("YEAR", Konsultasjonsdato) as year from Konsultasjon group by DATEPART("ISO_WEEK", Konsultasjonsdato) ,DATEPART("YEAR", Konsultasjonsdato)')
   setDT(res)
 
