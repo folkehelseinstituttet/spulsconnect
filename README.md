@@ -1,4 +1,4 @@
-# Sykdomspulsen for Windows (spulswin)
+# Sykdompulsen Connect (spulsconnect)
 
 This repo contains functions that allow you to interact with the Sykdomspulsen infrastructure developed by the Norwegian Institute of Public Health.
 
@@ -24,5 +24,5 @@ options(
 You will then save this file, close it, and restart RStudio. You can now install all FHI packages in the normal manner:
 
 ```
-install.package("spulswin")
+install.package("spulsconnect")
 ```
