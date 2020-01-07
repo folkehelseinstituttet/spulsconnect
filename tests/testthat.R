@@ -1,4 +1,4 @@
 library(testthat)
-library(spulswin)
+library(spulsconnect)
 
-test_check("spulswin")
+test_check("spulsconnect")

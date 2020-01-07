@@ -2,7 +2,7 @@ Package: spulsconnect
 Title: Sykdompulsen Connect
 Version: 2020.1.7
 Authors@R: person("Richard", "White", email = "w@rwhite.no", role = c("aut", "cre"))
-Description: Connects to the Sykdomspulsen infrastructure developed by the Norwegian Public Health Institute.
+Description: Connects to the Sykdomspulsen infrastructure developed by the Norwegian Institute of Public Health.
 Depends: R (>= 3.5.0)
 License: GPL-3
 Encoding: UTF-8
