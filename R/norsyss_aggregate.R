@@ -148,27 +148,25 @@ norsyss_aggregate_format_raw_data <- function(d, configs) {
 }
 
 norsyss_aggregate <- function(
-  date_from = "2006-01-01",
-  date_to = lubridate::today(),
-  ages = c(
-    "0-4" = "0-4",
-    "5-14" = "5-9",
-    "5-14" = "10-14",
-    "15-19" = "15-19",
-    "20-29" = "20-29",
-    "30-64" = "30-39",
-    "30-64" = "40-49",
-    "30-64" = "50-59",
-    "30-64" = "60-64",
-    "65-69" = "65+",
-    "70-79" = "65+",
-    "80+" = "65+"
-  ),
-  folder,
-  overwrite_file = FALSE,
-  ...
-  ) {
-
+                              date_from = "2006-01-01",
+                              date_to = lubridate::today(),
+                              ages = c(
+                                "0-4" = "0-4",
+                                "5-14" = "5-9",
+                                "5-14" = "10-14",
+                                "15-19" = "15-19",
+                                "20-29" = "20-29",
+                                "30-64" = "30-39",
+                                "30-64" = "40-49",
+                                "30-64" = "50-59",
+                                "30-64" = "60-64",
+                                "65-69" = "65+",
+                                "70-79" = "65+",
+                                "80+" = "65+"
+                              ),
+                              folder,
+                              overwrite_file = FALSE,
+                              ...) {
   file_name <- paste0("partially_formatted_", format(Sys.time(), "%Y_%m_%d"), ".txt")
   file_temp <- fs::path(tempdir(), file_name)
   file_permanent <- fs::path(folder, file_name)
@@ -195,7 +193,8 @@ norsyss_aggregate <- function(
   # predefine storage of results
   pb <- progress::progress_bar$new(
     format = "  downloading [:bar] :percent eta: :eta",
-    total = nrow(datesToExtract), clear = FALSE, width= 60)
+    total = nrow(datesToExtract), clear = FALSE, width = 60
+  )
 
   for (i in 1:nrow(datesToExtract)) {
     pb$tick()
@@ -240,27 +239,26 @@ get_n_doctors <- function(folder) {
 #' @param overwrite_file a
 #' @export
 norsyss_download_new_data <- function(
-  confirm = FALSE,
-  date_from = "2006-01-01",
-  date_to = lubridate::today(),
-  ages = c(
-    "0-4" = "0-4",
-    "5-14" = "5-9",
-    "5-14" = "10-14",
-    "15-19" = "15-19",
-    "20-29" = "20-29",
-    "30-64" = "30-39",
-    "30-64" = "40-49",
-    "30-64" = "50-59",
-    "30-64" = "60-64",
-    "65-69" = "65+",
-    "70-79" = "65+",
-    "80+" = "65+"
-  ),
-  folder = fs::path(config$folder_sykdomspulsen,"data_raw","sykdomspuls"),
-  overwrite_file = FALSE
-  ){
-  stopifnot(confirm==TRUE)
+                                      confirm = FALSE,
+                                      date_from = "2006-01-01",
+                                      date_to = lubridate::today(),
+                                      ages = c(
+                                        "0-4" = "0-4",
+                                        "5-14" = "5-9",
+                                        "5-14" = "10-14",
+                                        "15-19" = "15-19",
+                                        "20-29" = "20-29",
+                                        "30-64" = "30-39",
+                                        "30-64" = "40-49",
+                                        "30-64" = "50-59",
+                                        "30-64" = "60-64",
+                                        "65-69" = "65+",
+                                        "70-79" = "65+",
+                                        "80+" = "65+"
+                                      ),
+                                      folder = fs::path(config$folder_sykdomspulsen, "data_raw", "sykdomspuls"),
+                                      overwrite_file = FALSE) {
+  stopifnot(confirm == TRUE)
 
   message(glue::glue("Downloading new data to {folder}"))
 
@@ -274,5 +272,3 @@ norsyss_download_new_data <- function(
     overwrite_file = overwrite_file
   )
 }
-
-
