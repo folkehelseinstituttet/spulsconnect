@@ -215,7 +215,7 @@ norsyss_aggregate <- function(
       utils::write.table(d, file_temp, sep = "\t", row.names = FALSE, col.names = FALSE, append = TRUE)
     }
   }
-  system(glue::glue("mv {file_temp} {file_permanent}"))
+  system(fs::file_move(file_temp, file_permanent))
 }
 
 # A function to extract the number of doctors per week
