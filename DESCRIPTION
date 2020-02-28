@@ -13,7 +13,8 @@ Imports: data.table,
  RODBC,
  glue,
  fs,
- lubridate
+ lubridate,
+ fhidata
 Suggests: testthat,
     knitr,
     rmarkdown
