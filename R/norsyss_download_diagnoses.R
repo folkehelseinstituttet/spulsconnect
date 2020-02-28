@@ -221,7 +221,7 @@ norsyss_download_aggregated_diagnoses <- function(
   }
 
   if (.Platform$OS.type == "windows") {
-    system(glue::glue("move {file_temp} {file_permanent}"))
+    fs::file_move(file_temp, file_permanent)
   } else {
     system(glue::glue("mv {file_temp} {file_permanent}"))
   }
