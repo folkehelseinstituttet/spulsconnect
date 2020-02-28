@@ -9,6 +9,7 @@ repos:
 r_packages:
 - covr
 - drat
+- shiny
 - pkgdown
 - styler
 - devtools
