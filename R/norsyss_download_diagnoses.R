@@ -1,4 +1,4 @@
-gen_fake_norsyss_raw_data <- function(){
+gen_fake_norsyss_raw_data <- function() {
   Id <- NULL
 
   d <- expand.grid(
@@ -11,7 +11,7 @@ gen_fake_norsyss_raw_data <- function(){
     Praksis = def_norsyss_fake$Praksis
   )
   setDT(d)
-  d[,Id:=1:.N]
+  d[, Id := 1:.N]
 
   return(d)
 }
@@ -22,9 +22,9 @@ norsyss_aggregate_format_raw_data <- function(d, diags) {
     Praksis <- Takst <- age <- consult <- from <-
     municip <- n_diff <- pb <- NULL
 
-  for(i in seq_along(diags)){
-    d[,(names(diags)[i]) := 0]
-    d[Diagnose %in% diags[[i]],(names(diags)[i]) := 1]
+  for (i in seq_along(diags)) {
+    d[, (names(diags)[i]) := 0]
+    d[Diagnose %in% diags[[i]], (names(diags)[i]) := 1]
   }
 
   ### Praksis
@@ -36,11 +36,11 @@ norsyss_aggregate_format_raw_data <- function(d, diags) {
   d[, Kontaktype := "Ukjent"]
   ### Kontaktkode
   for (takstkode in names(takstkoder)) {
-    d[ Takst == takstkode, Kontaktype := takstkoder[takstkode]]
+    d[Takst == takstkode, Kontaktype := takstkoder[takstkode]]
   }
 
   dups <- d[, .(n_diff = length(unique(Kontaktype))), by = .(Id)]
-  d <- d[ !(Id %in% dups[n_diff >= 2, Id] & Kontaktype == "Telefonkontakt")]
+  d <- d[!(Id %in% dups[n_diff >= 2, Id] & Kontaktype == "Telefonkontakt")]
 
   d[, age := "Ukjent"]
   d[PasientAlder == "0-4", age := "0-4"]
@@ -69,7 +69,7 @@ norsyss_aggregate_format_raw_data <- function(d, diags) {
 
   # Collapsing it down to 1 row per consultation
   d <- d[,
-      lapply(.SD, sum),
+    lapply(.SD, sum),
     by = .(
       Id,
       BehandlerKommune,
@@ -78,19 +78,20 @@ norsyss_aggregate_format_raw_data <- function(d, diags) {
       Praksis,
       Kontaktype
     ),
-    .SDcols = names(diags)]
-  d[,consult := 1]
+    .SDcols = names(diags)
+  ]
+  d[, consult := 1]
 
   # Collapsing it down to 1 row per kommune/age/day
-  d <- d[, lapply(.SD, sum),,
-  by = .(
-    BehandlerKommune,
-    age,
-    Konsultasjonsdato,
-    Praksis,
-    Kontaktype
-  ),
-  .SDcols = c(names(diags),"consult")
+  d <- d[, lapply(.SD, sum), ,
+    by = .(
+      BehandlerKommune,
+      age,
+      Konsultasjonsdato,
+      Praksis,
+      Kontaktype
+    ),
+    .SDcols = c(names(diags), "consult")
   ]
 
   d[, municip := paste0("municip", formatC(BehandlerKommune, width = 4, flag = 0))]
@@ -124,42 +125,41 @@ norsyss_aggregate_format_raw_data <- function(d, diags) {
 #' }
 #' @export
 norsyss_download_aggregated_diagnoses <- function(
-  date_from = "2020-01-01",
-  date_to = lubridate::today(),
-  folder = getwd(),
-  file_name = glue::glue("norsyss_{lubridate::today()}.txt"),
-  ages = c(
-    "0-4" = "0-4",
-    "5-14" = "5-9",
-    "5-14" = "10-14",
-    "15-19" = "15-19",
-    "20-29" = "20-29",
-    "30-64" = "30-39",
-    "30-64" = "40-49",
-    "30-64" = "50-59",
-    "30-64" = "60-64",
-    "65-69" = "65+",
-    "70-79" = "65+",
-    "80+" = "65+"
-  ),
-  diags = list(
-    "influensa" = c("R80"),
-    "gastro" = c("D11", "D70", "D73"),
-    "respiratory" = c("R05", "R74", "R78", "R83"),
-    "respiratoryexternal" = c("R05", "R74", "R78", "R83"),
-    "respiratoryinternal" = c("R05", "R74", "R83"),
-    "lungebetennelse" = c("R81"),
-    "bronkitt" = c("R78"),
-    "skabb" = c("S72"),
-    "emerg1" = c("R80"),
-    "emerg2" = c("R80"),
-    "emerg3" = c("R80"),
-    "emerg4" = c("R80"),
-    "emerg5" = c("R80")
-  ),
-  overwrite_file = FALSE,
-  ...) {
-
+                                                  date_from = "2020-01-01",
+                                                  date_to = lubridate::today(),
+                                                  folder = getwd(),
+                                                  file_name = glue::glue("norsyss_{lubridate::today()}.txt"),
+                                                  ages = c(
+                                                    "0-4" = "0-4",
+                                                    "5-14" = "5-9",
+                                                    "5-14" = "10-14",
+                                                    "15-19" = "15-19",
+                                                    "20-29" = "20-29",
+                                                    "30-64" = "30-39",
+                                                    "30-64" = "40-49",
+                                                    "30-64" = "50-59",
+                                                    "30-64" = "60-64",
+                                                    "65-69" = "65+",
+                                                    "70-79" = "65+",
+                                                    "80+" = "65+"
+                                                  ),
+                                                  diags = list(
+                                                    "influensa" = c("R80"),
+                                                    "gastro" = c("D11", "D70", "D73"),
+                                                    "respiratory" = c("R05", "R74", "R78", "R83"),
+                                                    "respiratoryexternal" = c("R05", "R74", "R78", "R83"),
+                                                    "respiratoryinternal" = c("R05", "R74", "R83"),
+                                                    "lungebetennelse" = c("R81"),
+                                                    "bronkitt" = c("R78"),
+                                                    "skabb" = c("S72"),
+                                                    "emerg1" = c("R80"),
+                                                    "emerg2" = c("R80"),
+                                                    "emerg3" = c("R80"),
+                                                    "emerg4" = c("R80"),
+                                                    "emerg5" = c("R80")
+                                                  ),
+                                                  overwrite_file = FALSE,
+                                                  ...) {
   . <- BehandlerKommune <- Diagnose <- Id <-
     Konsultasjonsdato <- Kontaktype <- PasientAlder <-
     Praksis <- Takst <- age <- consult <- from <-
@@ -180,7 +180,7 @@ norsyss_download_aggregated_diagnoses <- function(
     }
   }
 
-  if (.Platform$OS.type == "windows"){
+  if (.Platform$OS.type == "windows") {
     db <- RODBC::odbcDriverConnect("driver={Sql Server};server=dm-prod;database=SykdomspulsenAnalyse; trusted_connection=yes")
   } else {
     db <- RODBC::odbcDriverConnect("driver={ODBC Driver 17 for SQL Server};server=dm-prod;database=SykdomspulsenAnalyse; trusted_connection=yes")
@@ -220,7 +220,7 @@ norsyss_download_aggregated_diagnoses <- function(
     }
   }
 
-  if (.Platform$OS.type == "windows"){
+  if (.Platform$OS.type == "windows") {
     system(glue::glue("move {file_temp} {file_permanent}"))
   } else {
     system(glue::glue("mv {file_temp} {file_permanent}"))

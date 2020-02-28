@@ -89,11 +89,11 @@ def_norsyss_fake$PasientAlder <- c(
   "80+"
 )
 
-def_norsyss_fake$PasientKommune <- as.numeric(stringr::str_remove_all(fhidata::norway_locations_b2020$municip_code,"municip"))
+def_norsyss_fake$PasientKommune <- as.numeric(stringr::str_remove_all(fhidata::norway_locations_b2020$municip_code, "municip"))
 
-def_norsyss_fake$BehandlerKommune <- as.numeric(stringr::str_remove_all(fhidata::norway_locations_b2020$municip_code,"municip"))
+def_norsyss_fake$BehandlerKommune <- as.numeric(stringr::str_remove_all(fhidata::norway_locations_b2020$municip_code, "municip"))
 
-def_norsyss_fake$Konsultasjonsdato <- seq.Date(as.Date("2020-01-01"),as.Date("2020-01-02"),1)
+def_norsyss_fake$Konsultasjonsdato <- seq.Date(as.Date("2020-01-01"), as.Date("2020-01-02"), 1)
 
 def_norsyss_fake$Takst <- c(
   "11ad",
