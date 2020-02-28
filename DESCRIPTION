@@ -12,7 +12,8 @@ Imports: data.table,
  progress,
  RODBC,
  glue,
- fs
+ fs,
+ lubridate
 Suggests: testthat,
     knitr,
     rmarkdown

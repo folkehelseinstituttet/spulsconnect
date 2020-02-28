@@ -6,4 +6,5 @@
   packageStartupMessage("- GunnarOyvindIsaksson.Ro@fhi.no")
   packageStartupMessage("\nIf you have any scientific questions, please contact:")
   packageStartupMessage("- GryMarysol.Groneng@fhi.no")
+  packageStartupMessage("\nMore information available at https://folkehelseinstituttet.github.io/spulsconnect")
 }
