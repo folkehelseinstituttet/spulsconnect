@@ -1,0 +1,87 @@
+---
+title: "NorSySS Data"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{norsyss_data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+There are three ways to access NorSySS data:
+
+- Aggregated data via `spulsconnect` (most recommended)
+- Raw data via `spulsconnect` (somewhat recommended)
+- Raw data via basic R (not recommended)
+
+## Aggregated via `spulsconnect`
+
+This is the simplest way to access the data. We have verified that all of the data joins and subsequent cleaning of municipalities are correct.
+
+The function `norsyss_download_aggregated_diagnoses` will create a text file containing municipality-level aggregated data (municipality corresponds to medical provider, not necessarily where the patient lives).
+
+You can specify your desired list of ICPC-2 codes via the `diags` argument. The following code will download the data from `2020-01-01` until today, with two syndrome lists:
+
+- Influenza (R80)
+- Gastro (D11, D70, D73)
+
+```
+file <- norsyss_download_aggregated_diagnoses(
+  date_from = "2020-01-01",
+  date_to = lubridate::today(),
+  folder = getwd(),
+  diags = list(
+    "influenza" = c("R80"),
+    "gastro" = c("D11", "D70", "D73")
+  )
+)
+
+d <- data.table::fread(file)
+```
+
+## Raw data via `spulsconnect`
+
+The following code will download the raw data from `2020-01-01` until today.
+
+```
+# Connect to the database
+con <- spulsconnect::norsyss_connect()
+
+# Download the data
+d <- norsyss_download_raw(
+  con=con,
+  date_from = "2020-01-01",
+  date_to = lubridate::today()
+)
+```
+
+## - Raw data via basic R
+
+The following code will download the raw data from `2020-01-01` until today.
+
+```
+# Specify dates
+date_from <- "2020-01-01"
+date_to <- lubridate::today()
+
+# Connect to the database
+con <- RODBC::odbcDriverConnect("driver={Sql Server};server=dm-prod;database=SykdomspulsenAnalyse; trusted_connection=yes")
+
+# Download the data
+command <- paste0(
+    "select Id,Diagnose,PasientAlder,PasientKommune,BehandlerKommune,Konsultasjonsdato,Takst,Praksis from Konsultasjon join KonsultasjonDiagnose on Id=KonsultasjonId join KonsultasjonTakst on Id=KonsultasjonTakst.KonsultasjonId where Konsultasjonsdato >='",
+    date_from,
+    "' AND Konsultasjonsdato <= '",
+    date_to,
+    "'"
+)
+d <- RODBC::sqlQuery(con, command)
+setDT(d)
+```
+
