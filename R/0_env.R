@@ -1,3 +1,7 @@
+#' Environment to store db connections
+#' @export connections
+connections <- new.env()
+
 # Flags/values to be used in the 'dashboards' scene
 config <- new.env()
 

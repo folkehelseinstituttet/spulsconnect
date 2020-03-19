@@ -14,7 +14,10 @@ Imports: data.table,
  glue,
  fs,
  lubridate,
- fhidata
+ fhidata,
+ DBI,
+ odbc,
+ dplyr
 Suggests: testthat,
     knitr,
     rmarkdown
