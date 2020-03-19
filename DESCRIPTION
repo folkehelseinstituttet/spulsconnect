@@ -17,7 +17,8 @@ Imports: data.table,
  fhidata,
  DBI,
  odbc,
- dplyr
+ dplyr,
+ dbplyr
 Suggests: testthat,
     knitr,
     rmarkdown

@@ -1,6 +1,9 @@
 # spulsconnect 2020.3.19
 
+Including new functions:
 
+- tbl
+- use_db
 
 # spulsconnect 2020.3.6
 
