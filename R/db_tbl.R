@@ -3,18 +3,21 @@
 #' @param db a
 #' @export
 use_db <- function(conn, db) {
-  tryCatch({
-    a <- DBI::dbExecute(conn, glue::glue({
-      "USE {db};"
-    }))
-  }, error = function(e){
-    a <- DBI::dbExecute(conn, glue::glue({
-      "CREATE DATABASE {db};"
-    }))
-    a <- DBI::dbExecute(conn, glue::glue({
-      "USE {db};"
-    }))
-  })
+  tryCatch(
+    {
+      a <- DBI::dbExecute(conn, glue::glue({
+        "USE {db};"
+      }))
+    },
+    error = function(e) {
+      a <- DBI::dbExecute(conn, glue::glue({
+        "CREATE DATABASE {db};"
+      }))
+      a <- DBI::dbExecute(conn, glue::glue({
+        "USE {db};"
+      }))
+    }
+  )
 }
 
 
@@ -28,35 +31,33 @@ use_db <- function(conn, db) {
 #' @param db_config A list containing driver, server, db, port, user, password
 #' @export get_db_connection
 get_db_connection <- function(
-  driver = NULL,
-  server = NULL,
-  db = NULL,
-  port = NULL,
-  user = NULL,
-  password = NULL,
-  db_config = config$db_config
-) {
-
-  if(!is.null(db_config) & is.null(driver)){
+                              driver = NULL,
+                              server = NULL,
+                              db = NULL,
+                              port = NULL,
+                              user = NULL,
+                              password = NULL,
+                              db_config = config$db_config) {
+  if (!is.null(db_config) & is.null(driver)) {
     driver <- db_config$driver
   }
-  if(!is.null(db_config) & is.null(server)){
+  if (!is.null(db_config) & is.null(server)) {
     server <- db_config$server
   }
-  if(!is.null(db_config) & is.null(port)){
+  if (!is.null(db_config) & is.null(port)) {
     port <- db_config$port
   }
-  if(!is.null(db_config) & is.null(user)){
+  if (!is.null(db_config) & is.null(user)) {
     user <- db_config$user
   }
-  if(!is.null(db_config) & is.null(password)){
+  if (!is.null(db_config) & is.null(password)) {
     password <- db_config$password
   }
 
-  if(db_config$driver %in% c(
+  if (db_config$driver %in% c(
     "ODBC Driver 17 for SQL Server",
     "SQL Server"
-    )){
+  )) {
     return(
       DBI::dbConnect(
         odbc::odbc(),
@@ -66,9 +67,10 @@ get_db_connection <- function(
         uid = user,
         Pwd = password,
         encoding = "utf8",
-        trusted_connection="yes",
+        trusted_connection = "yes",
         database = db_config$db
-      ))
+      )
+    )
   } else {
     return(
       DBI::dbConnect(
@@ -79,7 +81,8 @@ get_db_connection <- function(
         user = user,
         password = password,
         encoding = "utf8"
-      ))
+      )
+    )
   }
 }
 
@@ -94,4 +97,3 @@ tbl <- function(table, db = "Sykdomspulsen_surv") {
   }
   return(dplyr::tbl(connections[[db]], table))
 }
-

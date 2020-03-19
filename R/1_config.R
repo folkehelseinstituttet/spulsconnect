@@ -1,10 +1,9 @@
 set_config <- function() {
-
   user <- Sys.getenv("SPULS_USER", "")
-  if(user == "") user <- NULL
+  if (user == "") user <- NULL
 
   password <- Sys.getenv("SPULS_PASSWORD", "")
-  if(password == "") password <- NULL
+  if (password == "") password <- NULL
 
   config$db_config <- list(
     driver = Sys.getenv("SPULS_DRIVER", "SQL Server"),
