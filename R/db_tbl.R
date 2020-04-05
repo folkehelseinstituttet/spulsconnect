@@ -105,13 +105,13 @@ list_tables <- function(db = "Sykdomspulsen_surv") {
     use_db(connections[[db]], db)
   }
   retval <- DBI::dbListTables(connections[[db]])
-  last_val <- which(retval=="trace_xe_action_map")-1
+  last_val <- which(retval == "trace_xe_action_map") - 1
   retval <- retval[1:last_val]
 
   # remove airflow tables
-  if(db=="Sykdomspulsen_surv"){
+  if (db == "Sykdomspulsen_surv") {
     retval <- retval[
-      which(! retval %in% c(
+      which(!retval %in% c(
         "alembic_version",
         "chart",
         "connection",

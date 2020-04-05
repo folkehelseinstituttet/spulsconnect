@@ -1,6 +1,6 @@
 .onAttach <- function(libname, pkgname) {
   packageStartupMessage("\nPACKAGE: spulsconnect")
-  packageStartupMessage("Version: 2020.03.19 at 09:48")
+  packageStartupMessage("Version: 2020.04.05 at 19:28")
   packageStartupMessage("\nIf you have any technical problems, please contact:")
   packageStartupMessage("- RichardAubrey.White@fhi.no")
   packageStartupMessage("- GunnarOyvindIsaksson.Ro@fhi.no")

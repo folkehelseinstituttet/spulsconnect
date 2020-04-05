@@ -1,7 +1,7 @@
 #' Connect to NorSySS database
 #' @export
 norsyss_connect <- function() {
-  if(is.null(connections_rodbc[["SykdomspulsenAnalyse"]])){
+  if (is.null(connections_rodbc[["SykdomspulsenAnalyse"]])) {
     if (.Platform$OS.type == "windows") {
       connections_rodbc[["SykdomspulsenAnalyse"]] <- RODBC::odbcDriverConnect("driver={Sql Server};server=dm-prod;database=SykdomspulsenAnalyse; trusted_connection=yes")
     } else {
