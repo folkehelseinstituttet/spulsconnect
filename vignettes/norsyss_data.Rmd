@@ -19,9 +19,13 @@ knitr::opts_chunk$set(
 We can get all values that exist in the raw data. There are three tables: `Konsultasjon`, `KonsultasjonDiagnose`, and `KonsultasjonTakst`
 
 ```
-# Obtain a list of all available age groups
+# Make sure you have these two packages loaded!
 library(data.table)
 library(magrittr)
+```
+
+```
+# Obtain a list of all available age groups
 d <- spulsconnect::tbl("Konsultasjon", db="SykdomspulsenAnalyse") %>%
   dplyr::count(PasientAlder) %>%
   dplyr::collect()
@@ -30,8 +34,6 @@ setorder(d, PasientAlder)
 d[]
 
 # Obtain a list of all available practice types
-library(data.table)
-library(magrittr)
 d <- spulsconnect::tbl("Konsultasjon", db="SykdomspulsenAnalyse") %>%
   dplyr::count(Praksis) %>%
   dplyr::collect()
@@ -42,8 +44,6 @@ d[]
 # Obtain a list of all available diagnosis codes
 # Note that these are also available in the variable:
 # spulsconnect::config$norsyss_icpc2_codes
-library(data.table)
-library(magrittr)
 d <- spulsconnect::tbl("KonsultasjonDiagnose", db="SykdomspulsenAnalyse") %>%
   dplyr::count(Diagnose) %>%
   dplyr::collect()
@@ -54,8 +54,6 @@ d[]
 # Obtain a list of all available takst codes
 # Note that these are also available in the variable:
 # spulsconnect::config$takstkoder
-library(data.table)
-library(magrittr)
 d <- spulsconnect::tbl("KonsultasjonTakst", db="SykdomspulsenAnalyse") %>%
   dplyr::count(Takst) %>%
   dplyr::collect()
