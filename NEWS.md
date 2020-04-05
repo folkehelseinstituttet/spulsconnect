@@ -1,3 +1,8 @@
+# spulsconnect 2020.4.5
+
+- updating vignette
+- fixing raw data downloads for NorSySS
+
 # spulsconnect 2020.3.19
 
 Including new functions:

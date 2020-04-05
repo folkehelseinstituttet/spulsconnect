@@ -1,25 +1,117 @@
+#' Environment to store rodbc db connections
+connections_rodbc <- new.env()
+
 #' Environment to store db connections
 #' @export connections
 connections <- new.env()
 
-# Flags/values to be used in the 'dashboards' scene
+#' Various definitions
+#' @export
 config <- new.env()
 
-takstkoder <- list(
-  "11ad" = "Legekontakt",
-  "11ak" = "Legekontakt",
-  "1ad" = "Telefonkontakt",
-  "1ak" = "Telefonkontakt",
-  "1bd" = "Telefonkontakt",
-  "1bk" = "Telefonkontakt",
-  "1g" = "Telefonkontakt",
-  "1h" = "Telefonkontakt",
-  "2ad" = "Legekontakt",
-  "2ae" = "Telefonkontakt",
-  "2ak" = "Legekontakt",
-  "2fk" = "Legekontakt"
+config$norsyss_icpc2_codes <- c(
+  "A02",
+  "A03",
+  "A05",
+  "A71",
+  "A72",
+  "A73",
+  "A74",
+  "A75",
+  "A76",
+  "A77",
+  "A78",
+  "B02",
+  "B70",
+  "B71",
+  "D01",
+  "D02",
+  "D06",
+  "D08",
+  "D09",
+  "D10",
+  "D11",
+  "D14",
+  "D18",
+  "D25",
+  "D29",
+  "D70",
+  "D73",
+  "D87",
+  "D96",
+  "D99",
+  "F70",
+  "F73",
+  "H01",
+  "H04",
+  "H13",
+  "H29",
+  "H71",
+  "H77",
+  "R01",
+  "R02",
+  "R03",
+  "R04",
+  "R05",
+  "R06",
+  "R07",
+  "R08",
+  "R09",
+  "R21",
+  "R24",
+  "R25",
+  "R27",
+  "R270000",
+  "R29",
+  "R71",
+  "R72",
+  "R74",
+  "R75",
+  "R76",
+  "R77",
+  "R78",
+  "R79",
+  "R80",
+  "R81",
+  "R82",
+  "R83",
+  "R95",
+  "R96",
+  "R99",
+  "R991",
+  "R9910000",
+  "S06",
+  "S07",
+  "S10",
+  "S12",
+  "S17",
+  "S29",
+  "S70",
+  "S71",
+  "S72",
+  "S73",
+  "S76",
+  "S84",
+  "S95",
+  "S99",
+  "XXX"
 )
 
+config$takstkoder <- list(
+  "11ad" = "oppmote",
+  "11ak" = "oppmote",
+  "1ad" = "telefonkontakt",
+  "1ak" = "telefonkontakt",
+  "1bd" = "telefonkontakt",
+  "1be" = "ekonsultasjon",
+  "1bk" = "telefonkontakt",
+  "1g" = "telefonkontakt",
+  "1h" = "telefonkontakt",
+  "2ad" = "oppmote",
+  "2ae" = "ekonsultasjon",
+  "2ak" = "oppmote",
+  "2fk" = "oppmote"
+)
 
 # NAV Kommune nummer til FREG
 # Some municip numbers received by KUHR do not match the expected
@@ -118,5 +210,6 @@ def_norsyss_fake$Praksis <- c(
   "Fastlege",
   "Fastl\u00F8nnet",
   "Legevakt",
-  "kommunal legevakt"
+  "kommunal legevakt",
+  "Annet"
 )

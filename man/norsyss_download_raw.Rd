@@ -4,11 +4,9 @@
 \alias{norsyss_download_raw}
 \title{Download raw data from NorSySS database}
 \usage{
-norsyss_download_raw(con, date_from, date_to)
+norsyss_download_raw(date_from, date_to)
 }
 \arguments{
-\item{con}{DB connection}
-
 \item{date_from}{Start date}
 
 \item{date_to}{End date}

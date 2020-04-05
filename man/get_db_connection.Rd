@@ -4,9 +4,15 @@
 \alias{get_db_connection}
 \title{get_db_connection}
 \usage{
-get_db_connection(driver = NULL, server = NULL, db = NULL,
-  port = NULL, user = NULL, password = NULL,
-  db_config = config$db_config)
+get_db_connection(
+  driver = NULL,
+  server = NULL,
+  db = NULL,
+  port = NULL,
+  user = NULL,
+  password = NULL,
+  db_config = config$db_config
+)
 }
 \arguments{
 \item{driver}{driver}

@@ -14,15 +14,115 @@ knitr::opts_chunk$set(
 )
 ```
 
-There are three ways to access NorSySS data:
+## Analysing the raw data
 
-- Aggregated data via `spulsconnect` (most recommended)
-- Raw data via `spulsconnect` (somewhat recommended)
-- Raw data via basic R (not recommended)
+We can get all values that exist in the raw data. There are three tables: `Konsultasjon`, `KonsultasjonDiagnose`, and `KonsultasjonTakst`
 
-## Aggregated via `spulsconnect`
+```
+# Obtain a list of all available age groups
+library(data.table)
+library(magrittr)
+d <- spulsconnect::tbl("Konsultasjon", db="SykdomspulsenAnalyse") %>%
+  dplyr::count(PasientAlder) %>%
+  dplyr::collect()
+setDT(d)
+setorder(d, PasientAlder)
+d[]
 
-This is the simplest way to access the data. We have verified that all of the data joins and subsequent cleaning of municipalities are correct.
+# Obtain a list of all available practice types
+library(data.table)
+library(magrittr)
+d <- spulsconnect::tbl("Konsultasjon", db="SykdomspulsenAnalyse") %>%
+  dplyr::count(Praksis) %>%
+  dplyr::collect()
+setDT(d)
+setorder(d, Praksis)
+d[]
+
+# Obtain a list of all available diagnosis codes
+# Note that these are also available in the variable:
+# spulsconnect::config$norsyss_icpc2_codes
+library(data.table)
+library(magrittr)
+d <- spulsconnect::tbl("KonsultasjonDiagnose", db="SykdomspulsenAnalyse") %>%
+  dplyr::count(Diagnose) %>%
+  dplyr::collect()
+setDT(d)
+setorder(d, Diagnose)
+d[]
+
+# Obtain a list of all available takst codes
+# Note that these are also available in the variable:
+# spulsconnect::config$takstkoder
+library(data.table)
+library(magrittr)
+d <- spulsconnect::tbl("KonsultasjonTakst", db="SykdomspulsenAnalyse") %>%
+  dplyr::count(Takst) %>%
+  dplyr::collect()
+setDT(d)
+setorder(d, Takst)
+d[]
+```
+
+## Accessing NorSySS data
+
+If you want access to the data after the ICPC-2 codes have been transformed into syndromes, there are two ways to access this data.
+
+If you want to work directly with ICPC-2 codes, then there are two ways to access this data.
+
+### Directly pulling clean data from the database
+
+You can access the data directly from the `Sykdomspulsen_surv` database, which is the production database for Sykdomspulsen. Inside this database the data has been cleaned and aggregated according to the definitions that have previously been agreed upon.
+
+To access this, use the function `spulsconnect::tbl("data_norsyss")`. This provides a [dbplyr tbl](https://dbplyr.tidyverse.org/articles/dbplyr.html#connecting-to-the-database) connection, which can then be manipulated using standard [dplyr functions](https://dplyr.tidyverse.org/articles/dplyr.html).
+
+Note that the "syndromes" are listed under the variable `tag_outcome` and they end with two groupings of letters. For example, `gastro_vk_ot` and `influensa_vk_o`. The groupings of letters have the following meanings:
+
+```
+Who performed the consultation?
+# v = (lege)vakt
+# k = (lege)kontor
+
+How did the consultation take place?
+# o = oppmote
+# t = telefon
+# e = ekonsultasjon
+```
+
+Below we list some useful examples. Remember that `year` and `week` are isoyear and isoweek!
+
+```
+# Get all tag_outcome's (syndromes) that are available
+spulsconnect::tbl("data_norsyss") %>%
+  dplyr::distinct(tag_outcome) %>%
+  dplyr::collect()
+  
+# Get all granularity_geo's that are available
+spulsconnect::tbl("data_norsyss") %>%
+  dplyr::distinct(granularity_geo) %>%
+  dplyr::collect()
+
+# Extract some data
+d <- spulsconnect::tbl("data_norsyss") %>%
+  dplyr::filter(tag_outcome %in% c("gastro_vk_ot")) %>%
+  dplyr::filter(year == 2020) %>%
+  dplyr::filter(age == "totalt") %>%
+  dplyr::filter(location_code %in% c("norge","municip0301")) %>%
+  dplyr::collect()
+  
+# Count the number of consultations in 2020 in Norway
+d <- spulsconnect::tbl("data_norsyss") %>%
+  dplyr::filter(tag_outcome %in% c("gastro_vk_ot")) %>%
+  dplyr::filter(year == 2020) %>%
+  dplyr::filter(age == "totalt") %>%
+  dplyr::filter(location_code %in% c("norge")) %>%
+  dplyr::summarize(n=sum(n,na.rm=T)) %>%
+  dplyr::collect()
+```
+
+### Creating your own syndromes
+
+If you want to create your own syndromes, then it is suggested that you use the function `norsyss_download_aggregated_diagnoses`. This is the simplest way to access the data with custom syndromes. We have verified that all of the data joins and subsequent cleaning of municipalities are correct.
 
 The function `norsyss_download_aggregated_diagnoses` will create a text file containing municipality-level aggregated data (municipality corresponds to medical provider, not necessarily where the patient lives).
 
@@ -45,23 +145,18 @@ file <- norsyss_download_aggregated_diagnoses(
 d <- data.table::fread(file)
 ```
 
-## Raw data via `spulsconnect`
+### Raw data via `spulsconnect`
 
 The following code will download the raw data from `2020-01-01` until today.
 
 ```
-# Connect to the database
-con <- spulsconnect::norsyss_connect()
-
-# Download the data
 d <- norsyss_download_raw(
-  con=con,
   date_from = "2020-01-01",
   date_to = lubridate::today()
 )
 ```
 
-## - Raw data via basic R
+### Raw data via basic R
 
 The following code will download the raw data from `2020-01-01` until today.
 
@@ -84,4 +179,5 @@ command <- paste0(
 d <- RODBC::sqlQuery(con, command)
 setDT(d)
 ```
+
 

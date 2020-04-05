@@ -29,20 +29,37 @@ norsyss_aggregate_format_raw_data <- function(d, diags) {
 
   ### Praksis
 
-  d[Praksis == "Fastl\u00F8nnet", Praksis := "Fastlege"]
-  d[Praksis == "kommunal legevakt", Praksis := "Legevakt"]
+  d[
+    Praksis %in% c(
+      "Fastl\u00F8nnet",
+      "Fastlege"
+    ),
+    Praksis := "legekontor"
+  ]
+  d[
+    Praksis %in% c(
+      "kommunal legevakt",
+      "Legevakt"
+    ),
+    Praksis := "legevakt"
+  ]
+  d[
+    Praksis %in% c(
+      "Annet"
+    ),
+    Praksis := "annet"
+  ]
 
-
-  d[, Kontaktype := "Ukjent"]
+  d[, Kontaktype := "ukjent"]
   ### Kontaktkode
-  for (takstkode in names(takstkoder)) {
-    d[Takst == takstkode, Kontaktype := takstkoder[takstkode]]
+  for (takstkode in names(config$takstkoder)) {
+    d[Takst == takstkode, Kontaktype := config$takstkoder[takstkode]]
   }
 
   dups <- d[, .(n_diff = length(unique(Kontaktype))), by = .(Id)]
-  d <- d[!(Id %in% dups[n_diff >= 2, Id] & Kontaktype == "Telefonkontakt")]
+  d <- d[!(Id %in% dups[n_diff >= 2, Id] & Kontaktype == "telefonkontakt")]
 
-  d[, age := "Ukjent"]
+  d[, age := "ukjent"]
   d[PasientAlder == "0-4", age := "0-4"]
   d[PasientAlder == "5-9", age := "5-14"]
   d[PasientAlder == "0-9", age := "5-14"]
@@ -109,7 +126,6 @@ norsyss_aggregate_format_raw_data <- function(d, diags) {
 #' @param date_to End date for extracting data
 #' @param folder Folder the data file will end up in
 #' @param file_name File name of the data file
-#' @param ages Age remapping
 #' @param diags Diagnosis codes to download
 #' @param overwrite_file Do you want to overwrite the file if it already exists?
 #' @param ... Not used
@@ -129,20 +145,6 @@ norsyss_download_aggregated_diagnoses <- function(
                                                   date_to = lubridate::today(),
                                                   folder = getwd(),
                                                   file_name = glue::glue("norsyss_{lubridate::today()}.txt"),
-                                                  ages = c(
-                                                    "0-4" = "0-4",
-                                                    "5-14" = "5-9",
-                                                    "5-14" = "10-14",
-                                                    "15-19" = "15-19",
-                                                    "20-29" = "20-29",
-                                                    "30-64" = "30-39",
-                                                    "30-64" = "40-49",
-                                                    "30-64" = "50-59",
-                                                    "30-64" = "60-64",
-                                                    "65-69" = "65+",
-                                                    "70-79" = "65+",
-                                                    "80+" = "65+"
-                                                  ),
                                                   diags = list(
                                                     "influensa" = c("R80"),
                                                     "gastro" = c("D11", "D70", "D73"),

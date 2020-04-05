@@ -20,7 +20,6 @@ use_db <- function(conn, db) {
   )
 }
 
-
 #' get_db_connection
 #' @param driver driver
 #' @param server server
@@ -91,9 +90,53 @@ get_db_connection <- function(
 #' @param db db
 #' @export
 tbl <- function(table, db = "Sykdomspulsen_surv") {
+  stopifnot(table %in% list_tables(db))
+
   if (is.null(connections[[db]])) {
-    connections[[db]] <- get_db_connection()
+    connections[[db]] <- get_db_connection(db = db)
     use_db(connections[[db]], db)
   }
   return(dplyr::tbl(connections[[db]], table))
+}
+
+list_tables <- function(db = "Sykdomspulsen_surv") {
+  if (is.null(connections[[db]])) {
+    connections[[db]] <- get_db_connection(db = db)
+    use_db(connections[[db]], db)
+  }
+  retval <- DBI::dbListTables(connections[[db]])
+  last_val <- which(retval=="trace_xe_action_map")-1
+  retval <- retval[1:last_val]
+
+  # remove airflow tables
+  if(db=="Sykdomspulsen_surv"){
+    retval <- retval[
+      which(! retval %in% c(
+        "alembic_version",
+        "chart",
+        "connection",
+        "dag",
+        "dag_pickle",
+        "dag_run",
+        "dag_tag",
+        "import_error",
+        "job",
+        "known_event",
+        "known_event_type",
+        "kube_resource_version",
+        "kube_worker_uuid",
+        "log",
+        "serialized_dag",
+        "sla_miss",
+        "slot_pool",
+        "task_fail",
+        "task_instance",
+        "task_reschedule",
+        "users",
+        "variable",
+        "xcom"
+      ))
+    ]
+  }
+  return(retval)
 }

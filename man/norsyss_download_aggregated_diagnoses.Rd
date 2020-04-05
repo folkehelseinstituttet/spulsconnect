@@ -4,18 +4,19 @@
 \alias{norsyss_download_aggregated_diagnoses}
 \title{Download NorSySS aggregated diagnoses}
 \usage{
-norsyss_download_aggregated_diagnoses(date_from = "2020-01-01",
-  date_to = lubridate::today(), folder = getwd(),
+norsyss_download_aggregated_diagnoses(
+  date_from = "2020-01-01",
+  date_to = lubridate::today(),
+  folder = getwd(),
   file_name = glue::glue("norsyss_{lubridate::today()}.txt"),
-  ages = c(`0-4` = "0-4", `5-14` = "5-9", `5-14` = "10-14", `15-19` =
-  "15-19", `20-29` = "20-29", `30-64` = "30-39", `30-64` = "40-49", `30-64`
-  = "50-59", `30-64` = "60-64", `65-69` = "65+", `70-79` = "65+", `80+` =
-  "65+"), diags = list(influensa = c("R80"), gastro = c("D11", "D70",
-  "D73"), respiratory = c("R05", "R74", "R78", "R83"), respiratoryexternal
-  = c("R05", "R74", "R78", "R83"), respiratoryinternal = c("R05", "R74",
-  "R83"), lungebetennelse = c("R81"), bronkitt = c("R78"), skabb =
-  c("S72"), emerg1 = c("R80"), emerg2 = c("R80"), emerg3 = c("R80"), emerg4
-  = c("R80"), emerg5 = c("R80")), overwrite_file = FALSE, ...)
+  diags = list(influensa = c("R80"), gastro = c("D11", "D70", "D73"), respiratory =
+    c("R05", "R74", "R78", "R83"), respiratoryexternal = c("R05", "R74", "R78", "R83"),
+    respiratoryinternal = c("R05", "R74", "R83"), lungebetennelse = c("R81"), bronkitt =
+    c("R78"), skabb = c("S72"), emerg1 = c("R80"), emerg2 = c("R80"), emerg3 = c("R80"),
+    emerg4 = c("R80"), emerg5 = c("R80")),
+  overwrite_file = FALSE,
+  ...
+)
 }
 \arguments{
 \item{date_from}{Start date for extracting data}
@@ -25,8 +26,6 @@ norsyss_download_aggregated_diagnoses(date_from = "2020-01-01",
 \item{folder}{Folder the data file will end up in}
 
 \item{file_name}{File name of the data file}
-
-\item{ages}{Age remapping}
 
 \item{diags}{Diagnosis codes to download}
 
