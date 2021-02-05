@@ -1,3 +1,7 @@
+# spulsconnect 2021.2.5
+
+- qsenc_save for saving encrypted files
+
 # spulsconnect 2020.4.5
 
 - updating vignette
