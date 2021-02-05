@@ -1,7 +1,9 @@
 Package: spulsconnect
 Title: Sykdompulsen Connect
 Version: 2020.4.5
-Authors@R: person("Richard", "White", email = "hello@rwhite.no", role = c("aut", "cre"))
+Authors@R: person(c("Richard","Aubrey"), "White", email = "hello@rwhite.no", role = c("aut", "cre"),
+    comment = c(ORCID = "0000-0002-6747-1726")
+  )
 Description: Connects to the Sykdomspulsen infrastructure developed by the Norwegian Institute of Public Health.
 Depends: R (>= 3.5.0)
 License: GPL-3
@@ -13,14 +15,12 @@ Imports: data.table,
  RODBC,
  glue,
  fs,
- lubridate,
- fhidata,
  DBI,
  odbc,
  dplyr,
- dbplyr,
  openssl,
- qs
+ qs,
+ stringr
 Suggests: testthat,
     knitr,
     rmarkdown
